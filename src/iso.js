@@ -79,7 +79,6 @@ const loadColors = () => {
 }
 
 const getSettings = () => {
-  console.log('settings');
   return new Promise(resolve => {
     // Check for user preference, if chrome.storage is available.
     // The storage API is not supported in content scripts.
@@ -97,7 +96,6 @@ const getSettings = () => {
 }
 
 const persistSetting = (key, value) => {
-  console.log('persist settings');
   if (chrome && chrome.storage) {
     const object = {}
     object[key] = value
@@ -108,7 +106,6 @@ const persistSetting = (key, value) => {
 }
 
 const initUI = () => {
-  console.log('init ui');
   const contributionsWrapper = document.createElement('div')
   contributionsWrapper.className = 'ic-contributions-wrapper position-relative'
   calendarGraph.before(contributionsWrapper)
@@ -157,7 +154,6 @@ const initUI = () => {
 }
 
 const handleViewToggle = event => {
-  console.log('handleViewToggle');
   setContainerViewType(event.target.dataset.icOption)
 
   document.querySelectorAll('.ic-toggle-option').forEach(toggle => {
@@ -174,7 +170,6 @@ const handleViewToggle = event => {
 }
 
 const setContainerViewType = type => {
-  console.log('set containter view');
   if (type === 'squares') {
     contributionsBox.classList.remove('ic-cubes')
     contributionsBox.classList.add('ic-squares')
@@ -185,7 +180,6 @@ const setContainerViewType = type => {
 }
 
 const loadStats = () => {
-  console.log('load stats')
   let temporaryStreak = 0
   let temporaryStreakStart = null
   let longestStreakStart = null
@@ -304,7 +298,6 @@ const loadStats = () => {
 }
 
 const getSquareColor = fill => {
-  console.log('get square color');
   switch (fill) {
     case 'var(--color-calendar-graph-day-bg)':
       return colors[0]
@@ -334,7 +327,6 @@ const getSquareColor = fill => {
 }
 
 const renderIsometricChart = () => {
-  console.log('render isometric chart');
   const SIZE = 16
   const MAX_HEIGHT = 100
   const firstRect = document.querySelectorAll('.js-calendar-graph-svg g > g')[1]
@@ -366,7 +358,6 @@ const renderIsometricChart = () => {
 }
 
 const renderStats = () => {
-  console.log('render stats');
   const topMarkup = `
     <div class="position-absolute top-0 right-0 mt-3 mr-5">
       <h5 class="mb-1">Contributions</h5>
@@ -419,8 +410,16 @@ const renderStats = () => {
   document.querySelector('.ic-contributions-wrapper').append(icStatsBlockBottom)
 }
 
+const insertExtraInfo = () => {
+  const test = document.createElement('div');
+  test.innerHTML = "THIS IS A TEST";
+  console.log(test);
+  const parent = contributionsBox.parentNode;
+
+  parent.insertBefore(test, contributionsBox);
+}
+
 const generateIsometricChart = () => {
-  console.log('generate isometric chart');
   calendarGraph = document.querySelector('.js-calendar-graph')
   contributionsBox = document.querySelector('.js-yearly-contributions')
 
@@ -438,7 +437,6 @@ const precisionRound = (number, precision) => {
 }
 
 const datesDayDifference = (dateString1, dateString2) => {
-  console.log('dates day difference');
   let diffDays = null
   let date1 = null
   let date2 = null
@@ -473,9 +471,8 @@ const formatDateString = (dateString, options) => {
 }
 
 if (document.querySelector('.js-calendar-graph')) {
-  console.log("first");
   const settingsPromise = getSettings()
-  settingsPromise.then(generateIsometricChart)
+  settingsPromise.then(generateIsometricChart).then(insertExtraInfo);
 
   const config = {attributes: true, childList: true, subtree: false}
   const callback = mutationsList => {
